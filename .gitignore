@@ -1,0 +1,24 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# env / secrets
+.env
+*.env
+
+# data
+*.sqlite3
+*.db
+chroma/
+.chroma/
+
+# eval outputs (리포트는 커밋, 원시 응답 캐시는 제외)
+eval/.cache/
+
+# misc
+.DS_Store
+*.log
+.pytest_cache/
+.ruff_cache/
