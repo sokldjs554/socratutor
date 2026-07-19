@@ -34,10 +34,12 @@
 ## 🗓️ 진행 상황
 
 - [x] 프로젝트 기획 및 설계
-- [ ] 1주차: FastAPI 셋업, RAG 없는 튜터 챗 v1, Streamlit UI
-- [ ] 2주차: 문법 노트 작성 → ChromaDB RAG, 툴 기반 에이전트 전환
-- [ ] 3주차: 오답 메모리, 퀴즈 툴, 토큰·지연·비용 로깅
-- [ ] 4주차: 평가 파이프라인, 프롬프트 개선 사이클, 테스트·CI
+- [x] 뼈대 구축: FastAPI + 에이전트 루프 + RAG/메모리/평가 스크립트 틀, 테스트·CI
+- [ ] 문법 노트 15~20개 작성 및 RAG 인덱스 구축
+- [ ] 시스템 프롬프트 실사용 검증 및 개선 (v1 → v2)
+- [ ] 퀴즈 툴(make_quiz) 구현
+- [ ] 평가 시나리오 12개+ 작성, 프롬프트 버전별 점수 기록
+- [ ] 데모 영상, 트러블슈팅 정리
 
 ## 📈 평가 점수 변화 (프롬프트 버전별)
 
@@ -49,7 +51,26 @@
 
 ## 🚀 실행 방법
 
-> 프로젝트 셋업 후 작성 예정
+```bash
+# 1. 의존성 설치 & 환경 변수
+pip install -r requirements.txt
+cp .env.example .env   # ANTHROPIC_API_KEY 입력
+
+# 2. RAG 인덱스 구축 (content/grammar/ 노트 임베딩)
+python -m app.rag
+
+# 3. API 서버
+uvicorn app.main:app --reload
+
+# 4. 채팅 UI (별도 터미널)
+streamlit run ui/streamlit_app.py
+
+# 5. 평가 파이프라인
+python -m eval.run --prompt-version v1
+
+# 테스트 / 린트
+pytest && ruff check .
+```
 
 ## 🧗 트러블슈팅 기록
 
