@@ -22,3 +22,6 @@ eval/.cache/
 *.log
 .pytest_cache/
 .ruff_cache/
+
+# docker volume
+data/

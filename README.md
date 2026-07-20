@@ -15,6 +15,7 @@
 | RAG | ChromaDB |
 | Memory / Log | SQLite (학습자 오답노트, 토큰·지연·비용 로그) |
 | UI | Streamlit |
+| Deploy | Docker, docker-compose, AWS EC2 (데모 배포) |
 | Test / CI | pytest, LLM-as-judge 평가 스크립트, GitHub Actions |
 
 ## 📋 주요 기능
@@ -39,6 +40,7 @@
 - [ ] 시스템 프롬프트 실사용 검증 및 개선 (v1 → v2)
 - [ ] 퀴즈 툴(make_quiz) 구현
 - [ ] 평가 시나리오 12개+ 작성, 프롬프트 버전별 점수 기록
+- [ ] AWS EC2에 Docker로 데모 배포
 - [ ] 데모 영상, 트러블슈팅 정리
 
 ## 📈 평가 점수 변화 (프롬프트 버전별)
@@ -70,6 +72,14 @@ python -m eval.run --prompt-version v1
 
 # 테스트 / 린트
 pytest && ruff check .
+```
+
+### Docker로 실행
+
+```bash
+cp .env.example .env   # ANTHROPIC_API_KEY 입력
+docker compose up --build
+# → http://localhost:8000 (컨테이너 시작 시 RAG 인덱스 자동 구축)
 ```
 
 ## 🧗 트러블슈팅 기록

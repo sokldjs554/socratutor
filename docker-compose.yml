@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      # DB와 벡터 인덱스를 호스트에 남겨 컨테이너 재시작 후에도 유지
+      - ./data:/app/data
+    environment:
+      - SOCRATUTOR_DB=data/socratutor.sqlite3

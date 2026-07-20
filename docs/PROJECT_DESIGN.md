@@ -68,6 +68,7 @@
 | UI | **Streamlit** | 채팅 데모 화면을 하루 만에. 프론트에 시간 쓰지 않음 |
 | 테스트 | pytest + LLM-as-judge 스크립트 | |
 | CI | GitHub Actions (lint + 유닛 테스트) | |
+| 배포 | **Docker + docker-compose**, 마지막에 **AWS EC2** 데모 배포 1회 | 공고 스킬 태그(AWS·Docker) 대응. Kubernetes는 인턴 스케일 초과 — "다음 단계"로만 언급 |
 
 > **비용 참고:** Claude Opus 4.8은 입력 $5 / 출력 $25 (1M 토큰당). 개발 중 반복 실험이나 평가 파이프라인의 채점자(judge)는 Haiku 4.5($1/$5)로 낮춰 비용을 아낄 수 있다 — 이 선택 자체를 README에 "비용을 고려한 모델 선택"으로 기록하면 우대사항 어필이 된다.
 
@@ -234,3 +235,4 @@ socratutor/
 - LangGraph로 튜터/출제/채점 역할을 나눈 멀티 에이전트 구조 전환
 - PostgreSQL + pgvector로 저장소 통합
 - 스트리밍 응답으로 체감 지연 개선
+- Kubernetes 기반 배포로 전환 (트래픽 증가 시 수평 확장)
