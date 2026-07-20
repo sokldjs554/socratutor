@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SocraTutor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+         background: #f5f3ee; display: flex; justify-content: center; min-height: 100vh; }
+  main { width: 100%; max-width: 720px; display: flex; flex-direction: column; height: 100vh; }
+  header { padding: 16px 20px; }
+  header h1 { font-size: 20px; }
+  header p { color: #777; font-size: 13px; margin-top: 2px; }
+  #chat { flex: 1; overflow-y: auto; padding: 8px 20px; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; margin: 6px 0;
+         white-space: pre-wrap; line-height: 1.5; font-size: 15px; }
+  .user { background: #2f6fed; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+  .bot  { background: #fff; border: 1px solid #e3ded2; border-bottom-left-radius: 4px; }
+  .meta { font-size: 11px; color: #999; margin: 0 4px 10px; }
+  form { display: flex; gap: 8px; padding: 14px 20px 20px; }
+  input { flex: 1; padding: 12px 14px; border: 1px solid #d8d2c4; border-radius: 10px;
+          font-size: 15px; outline: none; }
+  button { padding: 12px 18px; border: 0; border-radius: 10px; background: #2f6fed;
+           color: #fff; font-size: 15px; cursor: pointer; }
+  button:disabled { opacity: .5; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>🏛️ SocraTutor</h1>
+    <p>정답을 바로 알려주지 않는 소크라테스식 영어 튜터</p>
+  </header>
+  <div id="chat"></div>
+  <form id="form">
+    <input id="input" placeholder="영어 문법에 대해 물어보세요" autocomplete="off" autofocus>
+    <button id="send">전송</button>
+  </form>
+</main>
+<script>
+const chat = document.getElementById("chat");
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+
+function add(cls, text) {
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function addMeta(text) {
+  const div = document.createElement("div");
+  div.className = "meta";
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (!message) return;
+  add("user", message);
+  input.value = "";
+  send.disabled = true;
+  const thinking = add("bot", "생각 중...");
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: 1, message }),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    thinking.textContent = data.reply;
+    const u = data.usage;
+    addMeta(`토큰 ${u.input_tokens}+${u.output_tokens} · ${u.latency_ms}ms`);
+  } catch (err) {
+    thinking.textContent = "오류가 발생했습니다: " + err.message;
+  } finally {
+    send.disabled = false;
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>

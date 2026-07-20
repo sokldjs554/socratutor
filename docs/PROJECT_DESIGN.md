@@ -65,7 +65,7 @@
 | LLM | **Claude API** (`claude-opus-4-8`) | 공식 Python SDK의 tool use로 에이전트 구현 |
 | RAG | **ChromaDB** (로컬 임베디드) | 설치 한 줄, 인턴 스케일에 적정 |
 | DB | **SQLite** (→ 확장 시 PostgreSQL) | 학습자 메모리·로그 저장. 단순하게 시작 |
-| UI | **Streamlit** | 채팅 데모 화면을 하루 만에. 프론트에 시간 쓰지 않음 |
+| UI | **FastAPI 내장 웹 채팅 페이지** (HTML/JS 한 장) | 추가 의존성 없음. 구형 macOS(Intel)에서 Streamlit 의존성(pyarrow) 빌드 실패 이슈로 교체 — 트러블슈팅 기록 참고 |
 | 테스트 | pytest + LLM-as-judge 스크립트 | |
 | CI | GitHub Actions (lint + 유닛 테스트) | |
 | 배포 | **Docker + docker-compose**, (선택) AWS EC2 데모 배포 | 우대사항 "DevOps 등 다양한 스택 경험" 대응. 배포는 필수 아님 — 데모 영상으로 대체 가능 |
@@ -91,8 +91,8 @@
 
 ```
 ┌────────────┐     ┌──────────────────────────────────────────┐
-│ Streamlit  │ ──▶ │ FastAPI                                   │
-│ (채팅 UI)  │     │  ├─ POST /chat ──▶ Agent Loop (tool use)  │
+│ 웹 채팅 UI │ ──▶ │ FastAPI                                   │
+│ (브라우저) │     │  ├─ POST /chat ──▶ Agent Loop (tool use)  │
 └────────────┘     │  │      ├─ search_grammar_notes ─▶ ChromaDB│
                    │  │      ├─ get_mistake_notes  ─▶ SQLite    │
                    │  │      ├─ record_mistake     ─▶ SQLite    │
@@ -190,7 +190,7 @@ request_logs     ── id, session_id(fk), input_tokens, output_tokens,
 
 | 주차 | 목표 | 산출물 |
 |------|------|--------|
-| 1주차 | 기초 학습 + 뼈대 | Claude API·tool use 학습, FastAPI 셋업, RAG 없는 튜터 챗 v1 + Streamlit UI |
+| 1주차 | 기초 학습 + 뼈대 | Claude API·tool use 학습, FastAPI 셋업, RAG 없는 튜터 챗 v1 + 웹 채팅 UI |
 | 2주차 | RAG + 에이전트화 | 문법 노트 작성 → ChromaDB 구축, 툴 4개 정의, tool runner 루프 완성 |
 | 3주차 | 메모리 + 운영 | 오답노트 기록/주입, 퀴즈 툴, 토큰·지연·비용 로깅 + `/stats` |
 | 4주차 | 평가 + 마무리 | 평가 파이프라인, 프롬프트 2~3회 개선 사이클, 테스트·CI, README·트러블슈팅 정리 |
@@ -224,7 +224,6 @@ socratutor/
 │   ├── scenarios.yaml   # 평가 시나리오 30개
 │   ├── run.py           # 평가 실행 + 리포트 생성
 │   └── reports/         # 버전별 점수 리포트
-├── ui/streamlit_app.py
 ├── tests/
 ├── .github/workflows/ci.yml
 └── README.md            # 소개, 아키텍처, 실행법, 평가 점수 변화표, 트러블슈팅

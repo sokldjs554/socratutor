@@ -14,7 +14,7 @@
 | Backend | FastAPI |
 | RAG | ChromaDB |
 | Memory / Log | SQLite (학습자 오답노트, 토큰·지연·비용 로그) |
-| UI | Streamlit |
+| UI | FastAPI 내장 웹 채팅 페이지 (HTML/JS) |
 | Deploy | Docker, docker-compose, AWS EC2 (데모 배포) |
 | Test / CI | pytest, LLM-as-judge 평가 스크립트, GitHub Actions |
 
@@ -64,8 +64,7 @@ python -m app.rag
 # 3. API 서버
 uvicorn app.main:app --reload
 
-# 4. 채팅 UI (별도 터미널)
-streamlit run ui/streamlit_app.py
+# 4. 채팅 UI — 브라우저에서 http://localhost:8000 접속
 
 # 5. 평가 파이프라인
 python -m eval.run --prompt-version v1
@@ -84,4 +83,5 @@ docker compose up --build
 
 ## 🧗 트러블슈팅 기록
 
-> 개발하며 막힌 문제와 해결 과정을 기록합니다
+- **Python 3.13 + Intel Mac에서 의존성 설치 실패** — `onnxruntime`(chromadb 의존성)이 해당 환경용 배포판을 제공하지 않아 `ResolutionImpossible` 발생 → Python 3.12로 가상환경 재생성해 해결. 실행 환경은 Python 3.11~3.12 권장
+- **구형 macOS(Intel)에서 Streamlit 설치 실패** — Streamlit 의존성인 `pyarrow`가 이 플랫폼용 wheel이 없어 소스 빌드를 시도하다 실패(Arrow C++ 미설치) → UI를 FastAPI가 직접 서빙하는 HTML/JS 채팅 페이지로 교체. 의존성이 가벼워져 어떤 환경에서도 동작
