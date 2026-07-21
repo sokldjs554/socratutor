@@ -18,3 +18,9 @@ who(m) / which / that / whose + 불완전한 절
 - ✅ The book which I bought is interesting. (관계대명사가 이미 it 역할 — 중복 금지)
 - ❌ 콤마 뒤의 계속적 용법에 that 사용: The car, that I sold, ...
 - ✅ The car, **which** I sold, ... (콤마 뒤에는 that 불가)
+
+## 제한적 vs 비제한적 용법
+- 제한적 (콤마 없음): 어떤 사람/것인지 좁혀줌 — which, that 둘 다 가능
+  - The car that/which I bought is red.
+- 비제한적 (콤마 있음): 부가 설명 — **which만 가능, that 불가**
+  - The car, which I bought last year, is red.
