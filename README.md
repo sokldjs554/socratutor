@@ -92,4 +92,5 @@ docker compose up --build
 - **Python 3.13 + Intel Mac에서 의존성 설치 실패** — `onnxruntime`(chromadb 의존성)이 해당 환경용 배포판을 제공하지 않아 `ResolutionImpossible` 발생 → Python 3.12로 가상환경 재생성해 해결. 실행 환경은 Python 3.11~3.12 권장
 - **YAML 파싱 에러** — 시나리오 메시지에 문장을 추가할 때 닫는 따옴표 바깥에 이어 붙여 `ParserError` 발생 → 에러 메시지의 줄 번호로 위치를 찾아 문장 전체를 따옴표 한 쌍 안으로 수정. 문장 값은 항상 전체를 따옴표로 감싸는 습관
 - **프롬프트 개선이 점수를 낮춘 사건** — v2에서 "규칙 직접 서술 금지"를 추가하자 정확성·품질 점수가 하락. 리포트 코멘트를 비교 분석해 원인 발견: 튜터가 비교용 예문을 직접 지어내다 비문을 생성함 → v3에서 "노트 예문 우선 사용" 조건을 붙여 회복. 대조 측정(v1-rev)이 없었다면 원인 분리가 불가능했음
+- **로컬은 통과, CI는 실패** — 유닛 테스트가 로컬에선 통과하는데 GitHub Actions에서만 `No module named 'app'`으로 실패. 원인: 로컬은 `python -m pytest`(현재 폴더가 sys.path에 포함), CI는 `pytest` 직접 실행(미포함)이라는 실행 방식 차이 → `pytest.ini`에 `pythonpath = .` 설정으로 두 방식 모두 동작하게 수정
 - **구형 macOS(Intel)에서 Streamlit 설치 실패** — Streamlit 의존성인 `pyarrow`가 이 플랫폼용 wheel이 없어 소스 빌드를 시도하다 실패(Arrow C++ 미설치) → UI를 FastAPI가 직접 서빙하는 HTML/JS 채팅 페이지로 교체. 의존성이 가벼워져 어떤 환경에서도 동작
